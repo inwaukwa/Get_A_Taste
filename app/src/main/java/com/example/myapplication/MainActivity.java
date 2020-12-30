@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -38,20 +39,8 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
-//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//        StrictMode.setThreadPolicy(policy);
-//
-//        try {
-//            Class.forName(Classes);
-//            connection = DriverManager.getConnection(url, username, password);
-//            textview.setText("SUCCESS");
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//            textview.setText("ERROR");
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            textview.setText("FAILURE");
-//        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new HomeFragment()).commit();
 
     }
 
@@ -59,24 +48,27 @@ public class MainActivity extends AppCompatActivity {
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    return false;
+                    Fragment selectedFragment = null;
+
+                    switch (item.getItemId()) {
+                        case R.id.nav_home:
+                            selectedFragment = new HomeFragment();
+                            break;
+                        case R.id.nav_search:
+                            selectedFragment = new SearchFragment();
+                            break;
+                        case R.id.nav_favorites:
+                            selectedFragment = new FavoritesFragment();
+                            break;
+                        case R.id.nav_settings:
+                            selectedFragment = new SettingsFragment();
+                            break;
+                    }
+
+                    assert selectedFragment != null;
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
+                    return true;
                 }
             };
-//
-//    public void sqlButton(View view) throws SQLException {
-//
-//        if(connection != null) {
-//
-//            Statement statement = connection.createStatement();
-//            ResultSet resultSet = statement.executeQuery("Select * FROM employee;");
-//            resultSet.next();
-//                textview.setText(resultSet.getString("first_name"));
-//
-//        }
-//        else {
-//            textview.setText("Connection is null");
-//        }
-//
-//    }
 
 }
